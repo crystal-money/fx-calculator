@@ -1,0 +1,23 @@
+name: fx-calculator
+version: 0.1.0
+
+authors:
+  - Sijawusz Pur Rahnama <sija@sija.pl>
+
+dependencies:
+  money:
+    github: crystal-money/money
+    branch: master
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 1.6.4
+
+targets:
+  fx-calculator:
+    main: src/cli.cr
+
+crystal: ~> 1.17
+
+license: MIT

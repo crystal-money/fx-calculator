@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        crystal: [latest, nightly]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+
+      - name: Download source
+        uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: shards install
+
+      - name: Build binary
+        run: shards build
+
+      - name: Check formatting
+        run: crystal tool format --check
+        if: success() || failure()
+
+      - name: Run ameba linter
+        run: bin/ameba
+        if: success() || failure()

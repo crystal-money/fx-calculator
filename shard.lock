@@ -1,0 +1,14 @@
+version: 2.0
+shards:
+  ameba:
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 1.6.4
+
+  baked_file_system:
+    git: https://github.com/schovi/baked_file_system.git
+    version: 0.11.0
+
+  money:
+    git: https://github.com/crystal-money/money.git
+    version: 2.0.0-dev+git.commit.f8ec13ccb04e52f0448ba9338f48defb8bf14274
+
