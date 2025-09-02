@@ -6,7 +6,10 @@ require "./fx-calculator"
 Log.setup_from_env
 
 clear_currency_rates_cache = false
-config_path = nil
+config_path =
+  if File.exists?(FXCalculator::Config::DEFAULT_CONFIG_PATH)
+    FXCalculator::Config::DEFAULT_CONFIG_PATH
+  end
 
 currency_code = ENV["FX_CALCULATOR_CURRENCY"]?.presence
 currency_rates_ttl = ENV["FX_CALCULATOR_CURRENCY_RATES_TTL"]?.presence

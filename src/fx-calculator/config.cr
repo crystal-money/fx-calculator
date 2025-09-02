@@ -2,6 +2,10 @@ module FXCalculator
   class Config
     include YAML::Serializable
 
+    # Default configuration file path.
+    DEFAULT_CONFIG_PATH =
+      Path["~", ".config", "fx-calculator", "config.yml"].expand(home: true)
+
     # Filepath to currency rates cache.
     CURRENCY_RATES_FILEPATH =
       Path[Dir.tempdir] / "fx-calculator" / ".cache" / "currency_rates.json"
