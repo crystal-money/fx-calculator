@@ -17,6 +17,13 @@ shards build --release
 > [!NOTE]
 > Available rate providers can be found at <https://github.com/crystal-money/money/tree/master/src/money/currency/rate_provider>.
 
+Get a currency exchange rate between `EUR` and `USD`,
+using the `FloatRates` provider.
+
+```sh
+./bin/fx-calculator -p FloatRates 'EUR to USD'
+```
+
 Convert `200 USD` to `PLN` (by providing the currency inline),
 using the `FloatRates` provider.
 
