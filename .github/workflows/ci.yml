@@ -32,7 +32,7 @@ jobs:
         run: shards build
 
       - name: Run basic tests
-        run: bin/fx-calculator -p float_rates -k EUR '$111.11' '111,11 EUR to USD' 'USD to PLN'
+        run: bin/fx-calculator -p float_rates -C EUR '$111.11' '111,11 EUR to USD' 'USD to PLN'
 
       - name: Check formatting
         run: crystal tool format --check

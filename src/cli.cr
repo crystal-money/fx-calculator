@@ -22,16 +22,16 @@ values = %w[]
 option_parser = OptionParser.new do |parser|
   parser.banner = "Usage: fx-calculator [arguments]"
 
-  parser.on("-c PATH", "--config=PATH", "Path to config file") do |path|
-    config_path = Path[path] if path.presence
-  end
   parser.on("-x", "--clear-cache", "Clear currency rates cache") do
     clear_currency_rates_cache = true
   end
-  parser.on("-k CURRENCY", "--currency=CODE", "Target currency") do |code|
+  parser.on("-c PATH", "--config=PATH", "Path to configuration file") do |path|
+    config_path = Path[path] if path.presence
+  end
+  parser.on("-C CURRENCY", "--currency=CODE", "Default target currency") do |code|
     currency_code = code.presence
   end
-  parser.on("-t TIME_SPAN", "--currency-rates-ttl=TIME_SPAN", "Currency rates TTL") do |ttl|
+  parser.on("-t TTL", "--currency-rates-ttl=TIME_SPAN", "Currency rates TTL") do |ttl|
     currency_rates_ttl = ttl.presence
   end
   parser.on("-p RATE_PROVIDER", "--provider=NAME", "Currency provider to use") do |name|

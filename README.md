@@ -29,7 +29,7 @@ Convert `200 USD` and `430 EUR` to `PLN` (by setting the default currency),
 using the `FloatRates` provider.
 
 ```sh
-./bin/fx-calculator -p FloatRates -k PLN '$200' '430 EUR'
+./bin/fx-calculator -p FloatRates -C PLN '$200' '430 EUR'
 ```
 
 You can use a configuration file (`-c /path/to/config.yml`) instead of providing
