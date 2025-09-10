@@ -3,16 +3,22 @@ require "option_parser"
 require "colorize"
 require "./fx-calculator"
 
+DEFAULT_CONFIG_PATH =
+  Path["~", ".config", "fx-calculator", "config.yml"].expand(home: true)
+
 Log.setup_from_env
 
 clear_currency_rates_cache = false
 config_path =
-  if File.exists?(FXCalculator::Config::DEFAULT_CONFIG_PATH)
-    FXCalculator::Config::DEFAULT_CONFIG_PATH
+  if File.exists?(DEFAULT_CONFIG_PATH)
+    DEFAULT_CONFIG_PATH
   end
 
 currency_code = ENV["FX_CALCULATOR_CURRENCY"]?.presence
 currency_rates_ttl = ENV["FX_CALCULATOR_CURRENCY_RATES_TTL"]?.presence
+
+rate_store_name = ENV["FX_CALCULATOR_RATE_STORE"]?.presence
+rate_store_opts = ENV["FX_CALCULATOR_RATE_STORE_OPTIONS"]?.presence
 
 rate_provider_name = ENV["FX_CALCULATOR_RATE_PROVIDER"]?.presence
 rate_provider_opts = ENV["FX_CALCULATOR_RATE_PROVIDER_OPTIONS"]?.presence
@@ -22,23 +28,29 @@ values = %w[]
 option_parser = OptionParser.new do |parser|
   parser.banner = "Usage: fx-calculator [arguments]"
 
+  parser.on("-c PATH", "--config=PATH", "Path to configuration file") do |path|
+    config_path = Path[path].expand(home: true) if path.presence
+  end
   parser.on("-x", "--clear-cache", "Clear currency rates cache") do
     clear_currency_rates_cache = true
   end
-  parser.on("-c PATH", "--config=PATH", "Path to configuration file") do |path|
-    config_path = Path[path] if path.presence
-  end
   parser.on("-C CURRENCY", "--currency=CODE", "Default target currency") do |code|
-    currency_code = code.presence
+    currency_code = code if code.presence
   end
   parser.on("-t TTL", "--currency-rates-ttl=TIME_SPAN", "Currency rates TTL") do |ttl|
-    currency_rates_ttl = ttl.presence
+    currency_rates_ttl = ttl if ttl.presence
   end
-  parser.on("-p RATE_PROVIDER", "--provider=NAME", "Currency provider to use") do |name|
-    rate_provider_name = name.presence
+  parser.on("-s RATE_STORE", "--rate-store=NAME", "Currency store to use") do |name|
+    rate_store_name = name if name.presence
   end
-  parser.on("-o RATE_PROVIDER_OPTIONS", "--provider-options=JSON", "Currency provider options") do |opts|
-    rate_provider_opts = opts.presence
+  parser.on("-S RATE_STORE_OPTIONS", "--rate-store-options=JSON", "Currency store options") do |opts|
+    rate_store_opts = opts if opts.presence
+  end
+  parser.on("-p RATE_PROVIDER", "--rate-provider=NAME", "Currency provider to use") do |name|
+    rate_provider_name = name if name.presence
+  end
+  parser.on("-P RATE_PROVIDER_OPTIONS", "--rate-provider-options=JSON", "Currency provider options") do |opts|
+    rate_provider_opts = opts if opts.presence
   end
   parser.on("-v", "--version", "Print version") do
     puts FXCalculator::VERSION
@@ -48,63 +60,35 @@ option_parser = OptionParser.new do |parser|
     puts parser
     exit(0)
   end
-  parser.unknown_args do |args|
-    values.concat(args)
-  end
   parser.invalid_option do |flag|
     STDERR.puts "ERROR: #{flag} is not a valid option".colorize(:red)
     STDERR.puts parser
     exit(1)
   end
+  parser.unknown_args do |args|
+    values.concat(args)
+  end
 end
 
 option_parser.parse
 
+if values.empty?
+  abort option_parser
+end
+
 begin
+  config = FXCalculator::Utils.config_from_opts(
+    config_path,
+    rate_store_name,
+    rate_store_opts,
+    rate_provider_name,
+    rate_provider_opts,
+    currency_code,
+    currency_rates_ttl,
+  )
+
   if clear_currency_rates_cache
-    FXCalculator::Config.clear_currency_rates_cache!
-  end
-
-  if values.empty?
-    if clear_currency_rates_cache
-      exit(0)
-    else
-      STDERR.puts option_parser
-      exit(1)
-    end
-  end
-
-  config =
-    if path = config_path
-      File.open(path) do |file|
-        FXCalculator::Config.from_yaml(file)
-      end
-    else
-      FXCalculator::Config.from_yaml("{}")
-    end
-
-  if code = currency_code
-    config.currency = Money::Currency.find(code)
-  end
-
-  if name = rate_provider_name
-    config.rate_provider = begin
-      klass = Money::Currency::RateProvider.find(name)
-
-      if opts = rate_provider_opts
-        klass.from_json(opts)
-      else
-        klass.from_json("{}")
-      end
-    end
-  end
-
-  if ttl = currency_rates_ttl
-    config.currency_rates_ttl = Time::Span.parse(ttl)
-  end
-
-  unless config.rate_provider?
-    raise ArgumentError.new("Currency rate provider is required")
+    config.rate_store.clear
   end
 
   Money.configure do |context|
@@ -120,6 +104,5 @@ begin
   renderer = FXCalculator::Renderer.new
   renderer.render(moneys)
 rescue ex
-  STDERR.puts "ERROR: #{ex.message}".colorize(:red)
-  exit(1)
+  abort "ERROR: #{ex.message}".colorize(:red)
 end
