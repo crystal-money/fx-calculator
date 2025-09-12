@@ -9,7 +9,6 @@ module FXCalculator
       rate_provider_name : String?,
       rate_provider_opts : String?,
       currency_code : String?,
-      currency_rates_ttl : String?,
     )
       config =
         if config_path
@@ -37,11 +36,6 @@ module FXCalculator
       if currency_code
         config.currency =
           Money::Currency.find(currency_code)
-      end
-
-      if currency_rates_ttl
-        config.rate_store.ttl =
-          Time::Span::StringConverter.parse(currency_rates_ttl)
       end
 
       unless config.rate_provider?

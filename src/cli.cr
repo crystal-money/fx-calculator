@@ -15,7 +15,6 @@ config_path =
   end
 
 currency_code = ENV["FX_CALCULATOR_CURRENCY"]?.presence
-currency_rates_ttl = ENV["FX_CALCULATOR_CURRENCY_RATES_TTL"]?.presence
 
 rate_store_name = ENV["FX_CALCULATOR_RATE_STORE"]?.presence
 rate_store_opts = ENV["FX_CALCULATOR_RATE_STORE_OPTIONS"]?.presence
@@ -36,9 +35,6 @@ option_parser = OptionParser.new do |parser|
   end
   parser.on("-C CURRENCY", "--currency=CODE", "Default target currency") do |code|
     currency_code = code if code.presence
-  end
-  parser.on("-t TTL", "--currency-rates-ttl=TIME_SPAN", "Currency rates TTL") do |ttl|
-    currency_rates_ttl = ttl if ttl.presence
   end
   parser.on("-s RATE_STORE", "--rate-store=NAME", "Currency store to use") do |name|
     rate_store_name = name if name.presence
@@ -84,7 +80,6 @@ begin
     rate_provider_name,
     rate_provider_opts,
     currency_code,
-    currency_rates_ttl,
   )
 
   if clear_currency_rates_cache
