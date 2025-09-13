@@ -8,7 +8,7 @@ DEFAULT_CONFIG_PATH =
 
 Log.setup_from_env
 
-clear_currency_rates_cache = false
+clear_rate_store = false
 config_path =
   if File.exists?(DEFAULT_CONFIG_PATH)
     DEFAULT_CONFIG_PATH
@@ -31,7 +31,7 @@ option_parser = OptionParser.new do |parser|
     config_path = Path[path].expand(home: true) if path.presence
   end
   parser.on("-x", "--clear-cache", "Clear currency rates cache") do
-    clear_currency_rates_cache = true
+    clear_rate_store = true
   end
   parser.on("-C CURRENCY", "--currency=CODE", "Default target currency") do |code|
     currency_code = code if code.presence
@@ -82,7 +82,7 @@ begin
     currency_code,
   )
 
-  if clear_currency_rates_cache
+  if clear_rate_store
     config.rate_store.clear
   end
 
