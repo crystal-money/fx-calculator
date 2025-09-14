@@ -83,13 +83,12 @@ begin
   )
 
   if clear_rate_store
-    config.rate_store.clear
+    config.exchange.rate_store.clear
   end
 
   Money.configure do |context|
     context.default_currency = config.currency
-    context.default_rate_store = config.rate_store
-    context.default_rate_provider = config.rate_provider
+    context.default_exchange = config.exchange
   end
 
   moneys = values.map do |value|

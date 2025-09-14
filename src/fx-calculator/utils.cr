@@ -20,14 +20,14 @@ module FXCalculator
         end
 
       if rate_store_name
-        config.rate_store = begin
+        config.exchange.rate_store = begin
           klass = Money::Currency::RateStore.find(rate_store_name)
           klass.from_json(rate_store_opts || "{}")
         end
       end
 
       if rate_provider_name
-        config.rate_provider = begin
+        config.exchange.rate_provider = begin
           klass = Money::Currency::RateProvider.find(rate_provider_name)
           klass.from_json(rate_provider_opts || "{}")
         end
@@ -36,10 +36,6 @@ module FXCalculator
       if currency_code
         config.currency =
           Money::Currency.find(currency_code)
-      end
-
-      unless config.rate_provider?
-        raise ArgumentError.new("Currency rate provider is required")
       end
 
       config
