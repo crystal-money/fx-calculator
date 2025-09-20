@@ -49,7 +49,11 @@ option_parser = OptionParser.new do |parser|
     rate_provider_opts = opts if opts.presence
   end
   parser.on("-v", "--version", "Print version") do
-    puts FXCalculator::VERSION
+    if git_sha = FXCalculator::GIT_SHA
+      puts "%s [%s]" % {FXCalculator::VERSION, git_sha}
+    else
+      puts FXCalculator::VERSION
+    end
     exit(0)
   end
   parser.on("-h", "--help", "Show this help") do
