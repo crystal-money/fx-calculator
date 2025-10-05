@@ -49,7 +49,7 @@ exchange:
   rate_store:
     name: File
     options:
-      filepath: ~/.cache/fx-calculator/currency-rates.json
+      path: ~/.cache/fx-calculator/currency-rates.json
       ttl: 15 minutes
 
   rate_provider:
