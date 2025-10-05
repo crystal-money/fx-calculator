@@ -10,5 +10,9 @@ shards:
 
   money:
     git: https://github.com/crystal-money/money.git
-    version: 2.0.0-dev+git.commit.93a76c739c1d22800865756d8a8e81744a6dcddd
+    version: 2.0.0-dev+git.commit.f2f42f1d69f53d5ccaba2107f1331bb0c50df743
+
+  tssc:
+    git: https://github.com/sija/tssc.cr.git
+    version: 1.0.0
 
