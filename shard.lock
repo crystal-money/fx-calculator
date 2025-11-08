@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.6.4
+    version: 1.7.0-dev+git.commit.efa270b68e8da2759ea8006dcd8c0948d3019dd1
 
   atomic_write:
     git: https://github.com/chris-huxtable/atomic_write.cr.git
