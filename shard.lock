@@ -4,13 +4,17 @@ shards:
     git: https://github.com/crystal-ameba/ameba.git
     version: 1.6.4
 
+  atomic_write:
+    git: https://github.com/chris-huxtable/atomic_write.cr.git
+    version: 0.2.0
+
   baked_file_system:
     git: https://github.com/schovi/baked_file_system.git
     version: 0.11.0
 
   money:
     git: https://github.com/crystal-money/money.git
-    version: 2.0.0-dev+git.commit.f2f42f1d69f53d5ccaba2107f1331bb0c50df743
+    version: 2.0.0-dev+git.commit.88763de468cd1fce55a786b138608442f488a3f6
 
   tssc:
     git: https://github.com/sija/tssc.cr.git
