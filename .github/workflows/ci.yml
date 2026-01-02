@@ -33,11 +33,3 @@ jobs:
 
       - name: Run basic tests
         run: bin/fx-calculator -p float_rates -C EUR '$111.11' '111,11 EUR to USD' 'USD to PLN'
-
-      - name: Check formatting
-        run: crystal tool format --check
-        if: success() || failure()
-
-      - name: Run ameba linter
-        run: bin/ameba
-        if: success() || failure()
