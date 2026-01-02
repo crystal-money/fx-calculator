@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.7.0-dev+git.commit.efa270b68e8da2759ea8006dcd8c0948d3019dd1
+    version: 1.7.0-dev+git.commit.11af1b78c7ad635b94202c7bc78b3665ddb17e5e
 
   atomic_write:
     git: https://github.com/chris-huxtable/atomic_write.cr.git
@@ -14,7 +14,7 @@ shards:
 
   money:
     git: https://github.com/crystal-money/money.git
-    version: 2.0.0-dev+git.commit.88763de468cd1fce55a786b138608442f488a3f6
+    version: 2.0.0-dev+git.commit.b2372f7772a51e3f3e164c1dc7435b21d7689de3
 
   tssc:
     git: https://github.com/sija/tssc.cr.git
